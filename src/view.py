@@ -92,7 +92,7 @@ class View():
         self.label_email_login = customtkinter.CTkLabel(self.container_login,
                                                   text=f"EMAIL",
                                                   text_color="black",
-                                                  anchor="w", font=("Arial", 30, "bold"))
+                                                  font=("Arial", 30, "bold"))
         
         self.label_email_login.grid(row=0, column=0, sticky="w", padx=(0, 20), pady=(0, 20))
 
@@ -109,7 +109,6 @@ class View():
         self.label_senha = customtkinter.CTkLabel(self.container_login,
                                                   text=f"SENHA",
                                                   text_color="black",
-                                                  anchor="w",
                                                   font=("Arial", 30, "bold"))
         self.label_senha.grid(row=1, column=0, sticky="w", padx=(0, 20))
 
@@ -166,7 +165,7 @@ class View():
         self.label_nome = customtkinter.CTkLabel(self.container_registro,
                                                  text=f"NOME",
                                                  text_color="black",
-                                                 anchor="w", font=("Arial", 30, "bold"))
+                                                 font=("Arial", 30, "bold"))
         
         self.label_nome.grid(row=0, column=0, sticky="w", padx=(0, 20), pady=(0, 20))
 
@@ -183,7 +182,7 @@ class View():
         self.label_email_registro = customtkinter.CTkLabel(self.container_registro,
                                                   text=f"EMAIL",
                                                   text_color="black",
-                                                  anchor="w", font=("Arial", 30, "bold"))
+                                                  font=("Arial", 30, "bold"))
         
         self.label_email_registro.grid(row=1, column=0, sticky="w", padx=(0, 20), pady=(0, 20))
 
@@ -200,7 +199,6 @@ class View():
         self.label_senha = customtkinter.CTkLabel(self.container_registro,
                                                   text=f"SENHA",
                                                   text_color="black",
-                                                  anchor="w",
                                                   font=("Arial", 30, "bold"))
         self.label_senha.grid(row=2, column=0, sticky="w", padx=(0, 20))
 
@@ -274,7 +272,8 @@ class View():
                                                      text=f'PERFIL',
                                                      text_color="#000000",
                                                      fg_color='transparent',
-                                                     font=("Arial", 30, "bold"))
+                                                     font=("Arial", 30, "bold"),
+                                                     command=self.mostrar_tela_perfil)
         self.button_perfil.grid(row=1, column=0, pady=(0, 0))
 
 
@@ -308,9 +307,41 @@ class View():
                                  padx=20,
                                  pady=(30, 0))
         
+        self.container_perfil.grid_columnconfigure(1, weight=1)
+
+        self.label_perfil = customtkinter.CTkLabel(self.container_perfil,
+                                            text=f'SEU PERFIL',
+                                            text_color='black',
+                                            font=("Arial", 30, "bold"))
+        self.label_perfil.grid(row=0, column=0, columnspan=2, pady=(20, 0))
+        
         self.label_nome = customtkinter.CTkLabel(self.container_perfil,
-                                            text=f'NOME')
-        self.label_nome.grid()
+                                            text=f'NOME:',
+                                            text_color='black',
+                                            font=("Arial", 30, "bold"))
+        self.label_nome.grid(row=1, column=0, sticky='w')
+
+        self.label_email_perfil = customtkinter.CTkLabel(self.container_perfil,
+                                            text=f'EMAIL:',
+                                            text_color='black',
+                                            font=("Arial", 30, "bold"))
+        self.label_email_perfil.grid(row=2, column=0, sticky='w')
+
+        # Botão para voltar para o menu
+        self.button_menu = customtkinter.CTkButton(self.container_perfil,
+                                              corner_radius=20,
+                                              height=40,
+                                              width=70,
+                                              font=("Arial", 20),
+                                              text='MENU',
+                                              fg_color="#000000",
+                                              hover_color="#595959",
+                                              text_color="#FFFFFF",
+                                              command=self.mostrar_tela_menu)
+        
+        self.button_menu.grid(row=3, column=0, columnspan=2, pady=(20, 0))
+
+
 
     def tela_calculo(self, frame_fundo_azul):
         self.container_calculo = customtkinter.CTkFrame(frame_fundo_azul,
@@ -329,14 +360,14 @@ class View():
         self.label_exercicio = customtkinter.CTkLabel(self.container_calculo,
                                                  text=f"EXERCICIO",
                                                  text_color="black",
-                                                 anchor="w", font=("Arial", 30, "bold"))
+                                                 font=("Arial", 30, "bold"))
         
         self.label_exercicio.grid(row=0, column=0, sticky="w", padx=(0, 20), pady=(0, 20))
 
         # Combobox exercicio
         self.entry_exercicio = customtkinter.CTkComboBox(self.container_calculo,
                                                          values=['SUPINO',
-                                                                 'LEVANTAMENTO TERRA',
+                                                                 'DEADLIFT',
                                                                  'AGACHAMENTO'],
                                                          font=("Arial", 25),
                                                          fg_color="#66ccff",
@@ -350,7 +381,7 @@ class View():
         self.label_peso = customtkinter.CTkLabel(self.container_calculo,
                                                   text=f"PESO",
                                                   text_color="black",
-                                                  anchor="w", font=("Arial", 30, "bold"))
+                                                  font=("Arial", 30, "bold"))
         
         self.label_peso.grid(row=1, column=0, sticky="w", padx=(0, 20), pady=(0, 20))
 
@@ -367,7 +398,6 @@ class View():
         self.label_repeticao = customtkinter.CTkLabel(self.container_calculo,
                                                   text=f"REPETIÇÃO",
                                                   text_color="black",
-                                                  anchor="w",
                                                   font=("Arial", 30, "bold"))
         self.label_repeticao.grid(row=2, column=0, sticky="w", padx=(0, 20))
 
@@ -405,9 +435,98 @@ class View():
                                  padx=20,
                                  pady=(30, 0))
         
-        self.label_resultado = customtkinter.CTkLabel(self.container_resultado,
-                                            text=f'RESULTADO')
-        self.label_resultado.grid()
+        self.container_resultado.grid_columnconfigure(0, weight=1)
+        
+        
+        self.label_nivel_forca = customtkinter.CTkLabel(self.container_resultado,
+                                            text=f'SEU NIVEL DE FORÇA PARA O SUPINO É INTERMEDIARIO',
+                                            text_color='black',
+                                            font=("Arial", 25, "bold"),
+                                            wraplength=480)
+        self.label_nivel_forca.grid(row=0, column=0, pady=(0, 20))
+
+        self.container_frame_niveis()
+
+        self.label_maximo = customtkinter.CTkLabel(self.container_resultado,
+                                                   text=f'ESTIMA-SE QUE O SEU MÁXIMO PARA UMA REPETIÇÃO SEJA {200} KG',
+                                                   text_color='black',
+                                                   font=('Arial', 15, "bold"),
+                                                   wraplength=300)
+        self.label_maximo.grid(row=2, column=0, pady=(20, 0))
+
+        # Botão para voltar para o menu
+        self.button_menu = customtkinter.CTkButton(self.container_resultado,
+                                              corner_radius=20,
+                                              height=40,
+                                              width=70,
+                                              font=("Arial", 20),
+                                              text='MENU',
+                                              fg_color="#000000",
+                                              hover_color="#595959",
+                                              text_color="#FFFFFF",
+                                              command=self.mostrar_tela_menu)
+        
+        self.button_menu.grid(row=3, column=0, columnspan=2, pady=(20, 0))
+
+
+
+    def container_frame_niveis(self):
+        # Frame auxiliar para centralizar as 3 labels finais
+        self.container_niveis = customtkinter.CTkFrame(self.container_resultado,
+                                                       fg_color="black",)
+        self.container_niveis.grid(row=1, column=0, sticky='nsew', padx=30)
+
+        # Configura 3 colunas com pesos iguais para centralização
+        self.container_niveis.grid_columnconfigure((0, 1, 2), weight=1)
+
+        self.label_categoria = customtkinter.CTkLabel(self.container_niveis,
+                                                        text=f'PADRÃO DE FORÇA NA SUA CATEGORIA',
+                                                        text_color='white',
+                                                        font=('Arial', 15, "bold"))
+        self.label_categoria.grid(row=0, column=0, columnspan=3, pady=(5, 0))
+
+        # Label Iniciante
+        self.label_iniciante = customtkinter.CTkLabel(self.container_niveis,
+                                                text='INICIANTE',
+                                                text_color='white',
+                                                font=('Arial', 15, "bold"))
+        self.label_iniciante.grid(row=1, column=0, padx=10)
+
+        self.label_iniciante_valor = customtkinter.CTkLabel(self.container_niveis,
+                                                text=f'{100} KG ',
+                                                text_color='white',
+                                                font=('Arial', 15, "bold"))
+        self.label_iniciante_valor.grid(row=2, column=0, padx=10)
+
+        # Label Intermediário
+        self.label_intermediario = customtkinter.CTkLabel(self.container_niveis,
+                                                text='INTERMEDIARIO',
+                                                text_color='white',
+                                                font=('Arial', 15, "bold"))
+        self.label_intermediario.grid(row=1, column=1, padx=10)
+
+        self.label_intermediario_valor = customtkinter.CTkLabel(self.container_niveis,
+                                                text=f'{100} KG ',
+                                                text_color='white',
+                                                font=('Arial', 15, "bold"))
+        self.label_intermediario_valor.grid(row=2, column=1, padx=10)
+
+        # Label Avançado
+        self.label_avancado = customtkinter.CTkLabel(self.container_niveis,
+                                                text='AVANÇADO',
+                                                text_color='white',
+                                                font=('Arial', 15, "bold"))
+        self.label_avancado.grid(row=1, column=2, padx=10)
+
+        self.label_avancado_valor = customtkinter.CTkLabel(self.container_niveis,
+                                                text=f'{100} KG ',
+                                                text_color='white',
+                                                font=('Arial', 15, "bold"))
+        self.label_avancado_valor.grid(row=2, column=2, padx=10, pady=(0, 5))
+
+
+
+            
 
 
 
