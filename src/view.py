@@ -1,8 +1,19 @@
 import customtkinter
 from PIL import Image
+from controller import Controller
 
 class View():
     def __init__(self):
+
+        self.controller = Controller(self)
+
+        self.resultado = {"exercicio": "",
+                          "nivel": "INTERMEDIARIO",
+                          "repeticao_maxima": ""}
+        
+        self.usuario = {"nome": "",
+                        "email": ""}
+
         self.root = customtkinter.CTk()
         self.root.geometry("600x600")
         self.root.title('Força Saiyajin')
@@ -34,14 +45,10 @@ class View():
         self.frame_fundo_azul.grid_rowconfigure(0, weight=1)
         self.frame_fundo_azul.grid_columnconfigure(0, weight=1)
 
-        self.tela_login(self.frame_fundo_azul)
         self.tela_registro(self.frame_fundo_azul)
         self.tela_menu(self.frame_fundo_azul)
-        self.tela_perfil(self.frame_fundo_azul)
         self.tela_calculo(self.frame_fundo_azul)
-        self.tela_resultado(self.frame_fundo_azul)
-
-        self.mostrar_tela_login()
+        self.tela_login(self.frame_fundo_azul)
 
         self.root.mainloop()
 
@@ -54,24 +61,6 @@ class View():
 
         self.label_imagem = customtkinter.CTkLabel(container_imagem, image=imagem_ctk, text="")
         self.label_imagem.pack()
-
-    def mostrar_tela_login(self):
-        self.container_login.tkraise()
-
-    def mostrar_tela_registro(self):
-        self.container_registro.tkraise()
-
-    def mostrar_tela_menu(self):
-        self.container_menu.tkraise()
-
-    def mostrar_tela_perfil(self):
-        self.container_perfil.tkraise()
-
-    def mostrar_tela_calculo(self):
-        self.container_calculo.tkraise()
-    
-    def mostrar_tela_resultado(self):
-        self.container_resultado.tkraise()
 
     def tela_login(self, frame_fundo_azul):
         # Frame para armazenar os componentes do login
@@ -90,9 +79,9 @@ class View():
 
         # Label Email
         self.label_email_login = customtkinter.CTkLabel(self.container_login,
-                                                  text=f"EMAIL",
-                                                  text_color="black",
-                                                  font=("Arial", 30, "bold"))
+                                                        text=f"EMAIL",
+                                                        text_color="black",
+                                                        font=("Arial", 30, "bold"))
         
         self.label_email_login.grid(row=0, column=0, sticky="w", padx=(0, 20), pady=(0, 20))
 
@@ -113,29 +102,30 @@ class View():
         self.label_senha.grid(row=1, column=0, sticky="w", padx=(0, 20))
 
         # Entry Senha
-        self.entry_senha = customtkinter.CTkEntry(self.container_login,
+        self.entry_senha_login = customtkinter.CTkEntry(self.container_login,
                                                   font=("Arial", 25),
                                                   fg_color="#66ccff",
                                                   border_color="#000000",
-                                                  border_width=3)
+                                                  border_width=3,
+                                                  show="*")
         
-        self.entry_senha.grid(row=1, column=1, sticky="ew")
+        self.entry_senha_login.grid(row=1, column=1, sticky="ew")
 
         # Botão para logar
         self.button_logar = customtkinter.CTkButton(self.container_login,
-                                              corner_radius=20,
-                                              height=40,
-                                              width=70,
-                                              font=("Arial", 20),
-                                              text='LOGIN',
-                                              fg_color="#000000",
-                                              hover_color="#595959",
-                                              text_color="#FFFFFF",
-                                              command=self.mostrar_tela_menu)
+                                                    corner_radius=20,
+                                                    height=40,
+                                                    width=70,
+                                                    font=("Arial", 20),
+                                                    text='LOGIN',
+                                                    fg_color="#000000",
+                                                    hover_color="#595959",
+                                                    text_color="#FFFFFF",
+                                                    command=self.view_login)
         
         self.button_logar.grid(row=2, column=0, columnspan=2, pady=(20, 0))
 
-        self.label_registro = customtkinter.CTkButton(self.container_login,
+        self.button_login_registro = customtkinter.CTkButton(self.container_login,
                                                      text=f"FAÇA SEU CADASTRO AQUI",
                                                      text_color='#000000',
                                                      fg_color="transparent",
@@ -143,7 +133,14 @@ class View():
                                                      font=("Arial", 15, "bold"),
                                                      command=self.mostrar_tela_registro)
         
-        self.label_registro.grid(row=3, column=0, columnspan=2, pady=(10, 0))
+        self.button_login_registro.grid(row=3, column=0, columnspan=2, pady=(10, 0))
+
+        self.label_aviso_login = customtkinter.CTkLabel(self.container_login,
+                                                        text="",
+                                                        text_color='#000000',
+                                                        font=("Arial", 20, "bold"))
+        self.label_aviso_login.grid(row=4, column=0, columnspan=2, pady=(15, 0))
+        
 
         
     
@@ -203,13 +200,14 @@ class View():
         self.label_senha.grid(row=2, column=0, sticky="w", padx=(0, 20))
 
         # Entry Senha
-        self.entry_senha = customtkinter.CTkEntry(self.container_registro,
+        self.entry_senha_registro = customtkinter.CTkEntry(self.container_registro,
                                                   font=("Arial", 25),
                                                   fg_color="#66ccff",
                                                   border_color="#000000",
-                                                  border_width=3)
+                                                  border_width=3,
+                                                  show="*")
         
-        self.entry_senha.grid(row=2, column=1, sticky="ew")
+        self.entry_senha_registro.grid(row=2, column=1, sticky="ew")
 
         # Botão para registrar
         self.button_registro = customtkinter.CTkButton(self.container_registro,
@@ -221,11 +219,11 @@ class View():
                                               fg_color="#000000",
                                               hover_color="#595959",
                                               text_color="#FFFFFF",
-                                              command=self.mostrar_tela_login)
+                                              command=self.view_registro)
         
         self.button_registro.grid(row=3, column=0, columnspan=2, pady=(20, 0))
 
-        self.label_login = customtkinter.CTkButton(self.container_registro,
+        self.button_registro_login = customtkinter.CTkButton(self.container_registro,
                                                      text=f"FAÇA SEU LOGIN AQUI",
                                                      text_color='#000000',
                                                      fg_color="transparent",
@@ -233,7 +231,13 @@ class View():
                                                      font=("Arial", 15, "bold"),
                                                      command=self.mostrar_tela_login)
         
-        self.label_login.grid(row=4, column=0, columnspan=2, pady=(10, 0))
+        self.button_registro_login.grid(row=4, column=0, columnspan=2, pady=(10, 0))
+
+        self.label_aviso_registro = customtkinter.CTkLabel(self.container_registro,
+                                                        text="",
+                                                        text_color='#000000',
+                                                        font=("Arial", 20, "bold"))
+        self.label_aviso_registro.grid(row=5, column=0, columnspan=2, pady=(15, 0))
 
         
 
@@ -316,16 +320,32 @@ class View():
         self.label_perfil.grid(row=0, column=0, columnspan=2, pady=(20, 0))
         
         self.label_nome = customtkinter.CTkLabel(self.container_perfil,
-                                            text=f'NOME:',
+                                            text=f'NOME',
                                             text_color='black',
-                                            font=("Arial", 30, "bold"))
-        self.label_nome.grid(row=1, column=0, sticky='w')
+                                            font=("Arial", 25, "bold"))
+        self.label_nome.grid(row=1, column=0, sticky='w', pady=(10, 0))
+
+        self.label_nome_usuario = customtkinter.CTkLabel(self.container_perfil,
+                                            text=f'{self.usuario['nome'].upper()}',
+                                            text_color='black',
+                                            font=("Arial", 20),
+                                            wraplength=450,
+                                            justify='left')
+        self.label_nome_usuario.grid(row=2, column=0, sticky='w', padx=(20, 0))
 
         self.label_email_perfil = customtkinter.CTkLabel(self.container_perfil,
-                                            text=f'EMAIL:',
+                                            text=f'EMAIL',
                                             text_color='black',
-                                            font=("Arial", 30, "bold"))
-        self.label_email_perfil.grid(row=2, column=0, sticky='w')
+                                            font=("Arial", 25, "bold"))
+        self.label_email_perfil.grid(row=3, column=0, sticky='w', pady=(10, 0))
+
+        self.label_email_perfil_usuario = customtkinter.CTkLabel(self.container_perfil,
+                                            text=f'{self.usuario['email'].upper()}',
+                                            text_color='black',
+                                            font=("Arial", 20),
+                                            wraplength=450,
+                                            justify='left')
+        self.label_email_perfil_usuario.grid(row=4, column=0, sticky='w', padx=(20, 0))
 
         # Botão para voltar para o menu
         self.button_menu = customtkinter.CTkButton(self.container_perfil,
@@ -339,7 +359,7 @@ class View():
                                               text_color="#FFFFFF",
                                               command=self.mostrar_tela_menu)
         
-        self.button_menu.grid(row=3, column=0, columnspan=2, pady=(20, 0))
+        self.button_menu.grid(row=5, column=0, columnspan=2, pady=(20, 0))
 
 
 
@@ -374,6 +394,8 @@ class View():
                                                          border_color="#000000",
                                                          border_width=3,
                                                          dropdown_hover_color='#66ccff')
+        
+        self.entry_exercicio.configure(state="readonly")
         
         self.entry_exercicio.grid(row=0, column=1, sticky="ew" , pady=(0, 20))
 
@@ -420,9 +442,17 @@ class View():
                                               fg_color="#000000",
                                               hover_color="#595959",
                                               text_color="#FFFFFF",
-                                              command=self.mostrar_tela_resultado)
+                                              command=self.view_calculo)
         
         self.button_calcular.grid(row=3, column=0, columnspan=2, pady=(20, 0))
+
+        # Label de aviso de erro
+        self.label_aviso_calculo = customtkinter.CTkLabel(self.container_calculo,
+                                                        text="",
+                                                        text_color='#000000',
+                                                        font=("Arial", 20, "bold"))
+        self.label_aviso_calculo.grid(row=4, column=0, columnspan=2, pady=(15, 0))
+        
 
     def tela_resultado(self, frame_fundo_azul):
         self.container_resultado = customtkinter.CTkFrame(frame_fundo_azul,
@@ -439,7 +469,7 @@ class View():
         
         
         self.label_nivel_forca = customtkinter.CTkLabel(self.container_resultado,
-                                            text=f'SEU NIVEL DE FORÇA PARA O SUPINO É INTERMEDIARIO',
+                                            text=f'SEU NIVEL DE FORÇA PARA O {self.resultado["exercicio"]} É {self.resultado["nivel"]}',
                                             text_color='black',
                                             font=("Arial", 25, "bold"),
                                             wraplength=480)
@@ -448,7 +478,7 @@ class View():
         self.container_frame_niveis()
 
         self.label_maximo = customtkinter.CTkLabel(self.container_resultado,
-                                                   text=f'ESTIMA-SE QUE O SEU MÁXIMO PARA UMA REPETIÇÃO SEJA {200} KG',
+                                                   text=f'ESTIMA-SE QUE O SEU MÁXIMO PARA UMA REPETIÇÃO SEJA {self.resultado["repeticao_maxima"]} KG',
                                                    text_color='black',
                                                    font=('Arial', 15, "bold"),
                                                    wraplength=300)
@@ -525,14 +555,105 @@ class View():
         self.label_avancado_valor.grid(row=2, column=2, padx=10, pady=(0, 5))
 
 
-
-            
-
-
-
     def trocar_cor_button(self, button):
         button.bind("<Enter>", lambda e: button.configure(text_color="#FFFFFF", fg_color="#000000"))
         button.bind("<Leave>", lambda e: button.configure(text_color="#000000", fg_color="transparent"))
+    
+    # Troca de tela da interface
+    def mostrar_tela_login(self):
+        self.limpar_tela_login()
+        self.container_login.tkraise()
+
+    def mostrar_tela_registro(self):
+        self.limpar_tela_registro()
+        self.container_registro.tkraise()
+
+    def mostrar_tela_menu(self):
+        self.container_menu.tkraise()
+
+    def mostrar_tela_perfil(self):
+        self.tela_perfil(self.frame_fundo_azul)
+
+    def mostrar_tela_calculo(self):
+        self.limpar_tela_calculo()
+        self.container_calculo.tkraise()
+    
+    def mostrar_tela_resultado(self):
+        self.tela_resultado(self.frame_fundo_azul)
+
+    # Limpar os campos de entry da tela
+    def limpar_tela_login(self):
+        self.entry_email_login.delete(0, customtkinter.END)
+        self.entry_senha_login.delete(0, customtkinter.END)
+
+    def limpar_tela_registro(self):
+        self.entry_nome.delete(0, customtkinter.END)
+        self.entry_email_registro.delete(0, customtkinter.END)
+        self.entry_senha_registro.delete(0, customtkinter.END)
+
+    def limpar_tela_calculo(self):
+        self.entry_peso.delete(0, customtkinter.END)
+        self.entry_repeticao.delete(0, customtkinter.END)
+
+
+
+
+    # conexão com o controller
+
+    def view_registro(self):
+        nome = self.entry_nome.get()
+        email = self.entry_email_registro.get()
+        senha = self.entry_senha_registro.get()
+
+        retorno = self.controller.controller_registro(nome, email, senha)
+        if retorno == 0:
+            self.mostrar_tela_login()
+            self.label_aviso_registro.configure(text="")
+        else:
+            if retorno == 1:
+                self.label_aviso_registro.configure(text="E-MAIL JÁ EXISTE")
+                
+            elif retorno == 2:
+                self.label_aviso_registro.configure(text="CAMPO VAZIO")
+
+            self.mostrar_tela_registro()
+
+    def view_login(self):
+        email = self.entry_email_login.get()
+        senha = self.entry_senha_login.get()
+
+        retorno = self.controller.controller_login(email, senha)
+        if retorno == 1:
+            self.label_aviso_login.configure(text="LOGIN INVÁLIDO")
+            self.mostrar_tela_login()
+        else:
+            self.usuario = retorno
+            self.label_aviso_login.configure(text="")
+            self.mostrar_tela_menu()
+            
+    def view_calculo(self):
+        exercicio = self.entry_exercicio.get()
+        peso = self.entry_peso.get()
+        repeticao = self.entry_repeticao.get()
+
+        self.resultado = self.controller.controller_calculo(exercicio, peso, repeticao)
+        
+        if self.resultado == 1:
+            self.label_aviso_calculo.configure(text="CAMPO VAZIO")
+            self.mostrar_tela_calculo()
+        elif self.resultado == 2:
+            self.label_aviso_calculo.configure(text="DIGITE APENAS NÚMEROS")
+            self.mostrar_tela_calculo()
+
+        else:
+            self.label_aviso_calculo.configure(text="")
+            self.mostrar_tela_resultado()
+
+
+
+
+
+
 
 
 
