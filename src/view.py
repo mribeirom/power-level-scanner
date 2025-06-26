@@ -7,10 +7,6 @@ class View():
 
         self.controller = Controller(self)
 
-        self.resultado = {"exercicio": "",
-                          "nivel": "INTERMEDIARIO",
-                          "repeticao_maxima": ""}
-        
         self.usuario = {"nome": "",
                         "email": ""}
 
@@ -290,7 +286,7 @@ class View():
                                                      text_color="#000000",
                                                      fg_color='transparent',
                                                      font=("Arial", 30, "bold"),
-                                                     command=self.mostrar_tela_login)
+                                                     command=self.view_logout)
         self.button_sair.grid(row=2, column=0, pady=(0, 0))
 
 
@@ -301,6 +297,7 @@ class View():
 
 
     def tela_perfil(self, frame_fundo_azul):
+        usuario_logado = self.controller.solicitar_usuario_logado()
         self.container_perfil = customtkinter.CTkFrame(frame_fundo_azul,
                                                           width=500,
                                                           height=500,
@@ -326,7 +323,7 @@ class View():
         self.label_nome.grid(row=1, column=0, sticky='w', pady=(10, 0))
 
         self.label_nome_usuario = customtkinter.CTkLabel(self.container_perfil,
-                                            text=f'{self.usuario['nome'].upper()}',
+                                            text=f'{usuario_logado.get('nome').upper()}',
                                             text_color='black',
                                             font=("Arial", 20),
                                             wraplength=450,
@@ -340,7 +337,7 @@ class View():
         self.label_email_perfil.grid(row=3, column=0, sticky='w', pady=(10, 0))
 
         self.label_email_perfil_usuario = customtkinter.CTkLabel(self.container_perfil,
-                                            text=f'{self.usuario['email'].upper()}',
+                                            text=f'{usuario_logado.get('email').upper()}',
                                             text_color='black',
                                             font=("Arial", 20),
                                             wraplength=450,
@@ -455,6 +452,7 @@ class View():
         
 
     def tela_resultado(self, frame_fundo_azul):
+        resultado = self.controller.solicitar_resultado()
         self.container_resultado = customtkinter.CTkFrame(frame_fundo_azul,
                                                           width=500,
                                                           height=500,
@@ -469,7 +467,7 @@ class View():
         
         
         self.label_nivel_forca = customtkinter.CTkLabel(self.container_resultado,
-                                            text=f'SEU NIVEL DE FORÇA PARA O {self.resultado["exercicio"]} É {self.resultado["nivel"]}',
+                                            text=f'SEU NIVEL DE FORÇA PARA O {resultado.get('exercicio')} É {resultado.get('nivel')}',
                                             text_color='black',
                                             font=("Arial", 25, "bold"),
                                             wraplength=480)
@@ -478,7 +476,7 @@ class View():
         self.container_frame_niveis()
 
         self.label_maximo = customtkinter.CTkLabel(self.container_resultado,
-                                                   text=f'ESTIMA-SE QUE O SEU MÁXIMO PARA UMA REPETIÇÃO SEJA {self.resultado["repeticao_maxima"]} KG',
+                                                   text=f'ESTIMA-SE QUE O SEU MÁXIMO PARA UMA REPETIÇÃO SEJA {int(resultado.get('repeticao_maxima'))} KG',
                                                    text_color='black',
                                                    font=('Arial', 15, "bold"),
                                                    wraplength=300)
@@ -600,66 +598,57 @@ class View():
 
     # conexão com o controller
 
+    #registro
     def view_registro(self):
         nome = self.entry_nome.get()
         email = self.entry_email_registro.get()
         senha = self.entry_senha_registro.get()
 
-        retorno = self.controller.controller_registro(nome, email, senha)
-        if retorno == 0:
-            self.mostrar_tela_login()
-            self.label_aviso_registro.configure(text="")
-        else:
-            if retorno == 1:
-                self.label_aviso_registro.configure(text="E-MAIL JÁ EXISTE")
-                
-            elif retorno == 2:
-                self.label_aviso_registro.configure(text="CAMPO VAZIO")
+        self.controller.controller_registro(nome, email, senha)
+        
+    def registro_sucesso(self):
+        self.mostrar_tela_login()
+        self.label_aviso_registro.configure(text="")
 
-            self.mostrar_tela_registro()
-
+    def registro_mensagem_erro(self, mensagem):
+        self.label_aviso_registro.configure(text=mensagem)
+        self.mostrar_tela_registro()
+    
+    #login
     def view_login(self):
         email = self.entry_email_login.get()
         senha = self.entry_senha_login.get()
 
-        retorno = self.controller.controller_login(email, senha)
-        if retorno == 1:
-            self.label_aviso_login.configure(text="LOGIN INVÁLIDO")
-            self.mostrar_tela_login()
-        else:
-            self.usuario = retorno
-            self.label_aviso_login.configure(text="")
-            self.mostrar_tela_menu()
-            
+        self.controller.controller_login(email, senha)
+
+    def login_sucesso(self):
+        self.label_aviso_login.configure(text="")
+        self.mostrar_tela_menu()    
+        
+    def login_mensagem_erro(self, mensagem):
+        self.label_aviso_login.configure(text=mensagem)
+        self.mostrar_tela_login()
+
+    #calculo
     def view_calculo(self):
         exercicio = self.entry_exercicio.get()
         peso = self.entry_peso.get()
         repeticao = self.entry_repeticao.get()
 
-        self.resultado = self.controller.controller_calculo(exercicio, peso, repeticao)
-        
-        if self.resultado == 1:
-            self.label_aviso_calculo.configure(text="CAMPO VAZIO")
-            self.mostrar_tela_calculo()
-        elif self.resultado == 2:
-            self.label_aviso_calculo.configure(text="DIGITE APENAS NÚMEROS")
-            self.mostrar_tela_calculo()
+        self.controller.controller_calculo(exercicio, peso, repeticao)
+    
+    def calculo_sucesso(self):
+        self.label_aviso_calculo.configure(text="")
+        self.mostrar_tela_resultado()
+    
+    def calculo_mensagem_erro(self, mensagem):
+        self.label_aviso_calculo.configure(text=mensagem)
+        self.mostrar_tela_calculo()
 
-        else:
-            self.label_aviso_calculo.configure(text="")
-            self.mostrar_tela_resultado()
+    # logout
 
-
-
-
-
-
-
-
-
-
-
-
+    def view_logout(self):
+        self.controller.controller_logout()
 
 if __name__ == '__main__':
     View()
