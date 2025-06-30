@@ -7,8 +7,6 @@ class View():
 
         self.controller = Controller(self)
 
-        self.usuario = {"nome": "",
-                        "email": ""}
 
         self.root = customtkinter.CTk()
         self.root.geometry("600x600")
@@ -45,6 +43,7 @@ class View():
         self.tela_menu(self.frame_fundo_azul)
         self.tela_calculo(self.frame_fundo_azul)
         self.tela_login(self.frame_fundo_azul)
+
 
         self.root.mainloop()
 
@@ -121,6 +120,7 @@ class View():
         
         self.button_logar.grid(row=2, column=0, columnspan=2, pady=(20, 0))
 
+        # botão para interface de registro
         self.button_login_registro = customtkinter.CTkButton(self.container_login,
                                                      text=f"FAÇA SEU CADASTRO AQUI",
                                                      text_color='#000000',
@@ -131,6 +131,8 @@ class View():
         
         self.button_login_registro.grid(row=3, column=0, columnspan=2, pady=(10, 0))
 
+
+        # aviso de erro
         self.label_aviso_login = customtkinter.CTkLabel(self.container_login,
                                                         text="",
                                                         text_color='#000000',
@@ -219,6 +221,8 @@ class View():
         
         self.button_registro.grid(row=3, column=0, columnspan=2, pady=(20, 0))
 
+
+        # botão para interface de login
         self.button_registro_login = customtkinter.CTkButton(self.container_registro,
                                                      text=f"FAÇA SEU LOGIN AQUI",
                                                      text_color='#000000',
@@ -228,6 +232,8 @@ class View():
                                                      command=self.mostrar_tela_login)
         
         self.button_registro_login.grid(row=4, column=0, columnspan=2, pady=(10, 0))
+
+        # aviso de erro
 
         self.label_aviso_registro = customtkinter.CTkLabel(self.container_registro,
                                                         text="",
@@ -371,85 +377,139 @@ class View():
                                  padx=20,
                                  pady=(30, 0))
         
+        
         self.container_calculo.grid_columnconfigure(1, weight=1)
         
         # Label exercicio
         self.label_exercicio = customtkinter.CTkLabel(self.container_calculo,
                                                  text=f"EXERCICIO",
                                                  text_color="black",
-                                                 font=("Arial", 30, "bold"))
+                                                 font=("Arial", 20, "bold"))
         
-        self.label_exercicio.grid(row=0, column=0, sticky="w", padx=(0, 20), pady=(0, 20))
+        self.label_exercicio.grid(row=0, column=0, sticky="w", padx=(60, 10), pady=(0, 10))
 
         # Combobox exercicio
-        self.entry_exercicio = customtkinter.CTkComboBox(self.container_calculo,
+        self.combobox_exercicio = customtkinter.CTkComboBox(self.container_calculo,
                                                          values=['SUPINO',
                                                                  'DEADLIFT',
                                                                  'AGACHAMENTO'],
-                                                         font=("Arial", 25),
+                                                         font=("Arial", 20),
                                                          fg_color="#66ccff",
                                                          border_color="#000000",
                                                          border_width=3,
                                                          dropdown_hover_color='#66ccff')
         
-        self.entry_exercicio.configure(state="readonly")
+        self.combobox_exercicio.configure(state="readonly")
         
-        self.entry_exercicio.grid(row=0, column=1, sticky="ew" , pady=(0, 20))
+        self.combobox_exercicio.grid(row=0, column=1, sticky="ew", padx=(0, 60), pady=(0, 10))
 
-        # Label peso
-        self.label_peso = customtkinter.CTkLabel(self.container_calculo,
-                                                  text=f"PESO",
+        # Label carga
+        self.label_carga = customtkinter.CTkLabel(self.container_calculo,
+                                                  text=f"CARGA",
                                                   text_color="black",
-                                                  font=("Arial", 30, "bold"))
+                                                  font=("Arial", 20, "bold"))
         
-        self.label_peso.grid(row=1, column=0, sticky="w", padx=(0, 20), pady=(0, 20))
+        self.label_carga.grid(row=1, column=0, sticky="w", padx=(60, 10), pady=(0, 10))
 
-        # Entry peso
-        self.entry_peso = customtkinter.CTkEntry(self.container_calculo,
-                                                  font=("Arial", 25),
+        # Entry carga
+        self.entry_carga = customtkinter.CTkEntry(self.container_calculo,
+                                                  font=("Arial", 20),
                                                   fg_color="#66ccff",
                                                   border_color="#000000",
                                                   border_width=3)
         
-        self.entry_peso.grid(row=1, column=1, sticky="ew" , pady=(0, 20))
+        self.entry_carga.grid(row=1, column=1, sticky="ew", padx=(0, 60), pady=(0, 10))
 
         # Label repetição
         self.label_repeticao = customtkinter.CTkLabel(self.container_calculo,
                                                   text=f"REPETIÇÃO",
                                                   text_color="black",
-                                                  font=("Arial", 30, "bold"))
-        self.label_repeticao.grid(row=2, column=0, sticky="w", padx=(0, 20))
+                                                  font=("Arial", 20, "bold"))
+        self.label_repeticao.grid(row=2, column=0, sticky="w", padx=(60, 10), pady=(0, 10))
 
         # Entry repetição
         self.entry_repeticao = customtkinter.CTkEntry(self.container_calculo,
-                                                  font=("Arial", 25),
+                                                  font=("Arial", 20),
                                                   fg_color="#66ccff",
                                                   border_color="#000000",
                                                   border_width=3)
         
-        self.entry_repeticao.grid(row=2, column=1, sticky="ew")
+        self.entry_repeticao.grid(row=2, column=1, sticky="ew", padx=(0, 60), pady=(0, 10))
+
+        # Label genero
+        self.label_genero = customtkinter.CTkLabel(self.container_calculo,
+                                                  text=f"GENERO",
+                                                  text_color="black",
+                                                  font=("Arial", 20, "bold"))
+        self.label_genero.grid(row=3, column=0, sticky="w", padx=(60, 10), pady=(0, 10))
+
+        # Combobox genero
+        self.combobox_genero = customtkinter.CTkComboBox(self.container_calculo,
+                                                         values=['MASCULINO',
+                                                                 'FEMININO'],
+                                                         font=("Arial", 20),
+                                                         fg_color="#66ccff",
+                                                         border_color="#000000",
+                                                         border_width=3,
+                                                         dropdown_hover_color='#66ccff')
+        
+        self.combobox_genero.configure(state="readonly")
+        
+        self.combobox_genero.grid(row=3, column=1, sticky="ew", padx=(0, 60), pady=(0, 10))
+
+        # Label idade
+        self.label_idade = customtkinter.CTkLabel(self.container_calculo,
+                                                  text=f"IDADE",
+                                                  text_color="black",
+                                                  font=("Arial", 20, "bold"))
+        self.label_idade.grid(row=4, column=0, sticky="w", padx=(60, 10), pady=(0, 10))
+
+        # Entry idade
+        self.entry_idade = customtkinter.CTkEntry(self.container_calculo,
+                                                  font=("Arial", 20),
+                                                  fg_color="#66ccff",
+                                                  border_color="#000000",
+                                                  border_width=3)
+        
+        self.entry_idade.grid(row=4, column=1, sticky="ew", padx=(0, 60), pady=(0, 10))
+
+        # Label peso
+        self.label_peso = customtkinter.CTkLabel(self.container_calculo,
+                                                  text=f"PESO",
+                                                  text_color="black",
+                                                  font=("Arial", 20, "bold"))
+        self.label_peso.grid(row=5, column=0, sticky="w", padx=(60, 10), pady=(0, 10))
+
+        # Entry peso
+        self.entry_peso = customtkinter.CTkEntry(self.container_calculo,
+                                                  font=("Arial", 20),
+                                                  fg_color="#66ccff",
+                                                  border_color="#000000",
+                                                  border_width=3)
+        
+        self.entry_peso.grid(row=5, column=1, sticky="ew", padx=(0, 60), pady=(0, 10))
 
         # Botão para calcular
         self.button_calcular = customtkinter.CTkButton(self.container_calculo,
-                                              corner_radius=20,
-                                              height=40,
-                                              width=70,
-                                              font=("Arial", 20),
-                                              text='CALCULAR',
-                                              fg_color="#000000",
-                                              hover_color="#595959",
-                                              text_color="#FFFFFF",
-                                              command=self.view_calculo)
+                                            corner_radius=20,
+                                            height=30,
+                                            width=70,
+                                            font=("Arial", 15),
+                                            text='CALCULAR',
+                                            fg_color="#000000",
+                                            hover_color="#595959",
+                                            text_color="#FFFFFF",
+                                            command=self.view_calculo)
         
-        self.button_calcular.grid(row=3, column=0, columnspan=2, pady=(20, 0))
+        self.button_calcular.grid(row=6, column=0, columnspan=2)
 
         # Label de aviso de erro
         self.label_aviso_calculo = customtkinter.CTkLabel(self.container_calculo,
                                                         text="",
                                                         text_color='#000000',
-                                                        font=("Arial", 20, "bold"))
-        self.label_aviso_calculo.grid(row=4, column=0, columnspan=2, pady=(15, 0))
-        
+                                                        font=("Arial", 15, "bold"))
+        self.label_aviso_calculo.grid(row=7, column=0, columnspan=2)
+
 
     def tela_resultado(self, frame_fundo_azul):
         resultado = self.controller.solicitar_resultado()
@@ -464,23 +524,16 @@ class View():
                                  pady=(30, 0))
         
         self.container_resultado.grid_columnconfigure(0, weight=1)
-        
-        
-        self.label_nivel_forca = customtkinter.CTkLabel(self.container_resultado,
-                                            text=f'SEU NIVEL DE FORÇA PARA O {resultado.get('exercicio')} É {resultado.get('nivel')}',
-                                            text_color='black',
-                                            font=("Arial", 25, "bold"),
-                                            wraplength=480)
-        self.label_nivel_forca.grid(row=0, column=0, pady=(0, 20))
 
-        self.container_frame_niveis()
+        self.container_frame_nivel(resultado)
+        
 
         self.label_maximo = customtkinter.CTkLabel(self.container_resultado,
                                                    text=f'ESTIMA-SE QUE O SEU MÁXIMO PARA UMA REPETIÇÃO SEJA {int(resultado.get('repeticao_maxima'))} KG',
                                                    text_color='black',
                                                    font=('Arial', 15, "bold"),
                                                    wraplength=300)
-        self.label_maximo.grid(row=2, column=0, pady=(20, 0))
+        self.label_maximo.grid(row=1, column=0, pady=(10, 0))
 
         # Botão para voltar para o menu
         self.button_menu = customtkinter.CTkButton(self.container_resultado,
@@ -494,63 +547,25 @@ class View():
                                               text_color="#FFFFFF",
                                               command=self.mostrar_tela_menu)
         
-        self.button_menu.grid(row=3, column=0, columnspan=2, pady=(20, 0))
+        self.button_menu.grid(row=2, column=0, columnspan=2, pady=(20, 0))
 
 
 
-    def container_frame_niveis(self):
+    def container_frame_nivel(self, resultado):
         # Frame auxiliar para centralizar as 3 labels finais
-        self.container_niveis = customtkinter.CTkFrame(self.container_resultado,
+        self.container_nivel = customtkinter.CTkFrame(self.container_resultado,
                                                        fg_color="black",)
-        self.container_niveis.grid(row=1, column=0, sticky='nsew', padx=30)
+        self.container_nivel.grid(row=0, column=0, sticky='nsew', padx=20, pady=10)
 
-        # Configura 3 colunas com pesos iguais para centralização
-        self.container_niveis.grid_columnconfigure((0, 1, 2), weight=1)
+        self.container_nivel.columnconfigure(0, weight=1)
 
-        self.label_categoria = customtkinter.CTkLabel(self.container_niveis,
-                                                        text=f'PADRÃO DE FORÇA NA SUA CATEGORIA',
-                                                        text_color='white',
-                                                        font=('Arial', 15, "bold"))
-        self.label_categoria.grid(row=0, column=0, columnspan=3, pady=(5, 0))
+        self.label_nivel_forca = customtkinter.CTkLabel(self.container_nivel,
+                                            text=f'SEU NIVEL DE FORÇA PARA O {resultado.get('exercicio')} É {resultado.get('nivel')}',
+                                            text_color='white',
+                                            font=("Arial", 25, "bold"),
+                                            wraplength=470)
+        self.label_nivel_forca.grid(row=0, column=0, pady=20)
 
-        # Label Iniciante
-        self.label_iniciante = customtkinter.CTkLabel(self.container_niveis,
-                                                text='INICIANTE',
-                                                text_color='white',
-                                                font=('Arial', 15, "bold"))
-        self.label_iniciante.grid(row=1, column=0, padx=10)
-
-        self.label_iniciante_valor = customtkinter.CTkLabel(self.container_niveis,
-                                                text=f'{100} KG ',
-                                                text_color='white',
-                                                font=('Arial', 15, "bold"))
-        self.label_iniciante_valor.grid(row=2, column=0, padx=10)
-
-        # Label Intermediário
-        self.label_intermediario = customtkinter.CTkLabel(self.container_niveis,
-                                                text='INTERMEDIARIO',
-                                                text_color='white',
-                                                font=('Arial', 15, "bold"))
-        self.label_intermediario.grid(row=1, column=1, padx=10)
-
-        self.label_intermediario_valor = customtkinter.CTkLabel(self.container_niveis,
-                                                text=f'{100} KG ',
-                                                text_color='white',
-                                                font=('Arial', 15, "bold"))
-        self.label_intermediario_valor.grid(row=2, column=1, padx=10)
-
-        # Label Avançado
-        self.label_avancado = customtkinter.CTkLabel(self.container_niveis,
-                                                text='AVANÇADO',
-                                                text_color='white',
-                                                font=('Arial', 15, "bold"))
-        self.label_avancado.grid(row=1, column=2, padx=10)
-
-        self.label_avancado_valor = customtkinter.CTkLabel(self.container_niveis,
-                                                text=f'{100} KG ',
-                                                text_color='white',
-                                                font=('Arial', 15, "bold"))
-        self.label_avancado_valor.grid(row=2, column=2, padx=10, pady=(0, 5))
 
 
     def trocar_cor_button(self, button):
@@ -590,10 +605,10 @@ class View():
         self.entry_senha_registro.delete(0, customtkinter.END)
 
     def limpar_tela_calculo(self):
-        self.entry_peso.delete(0, customtkinter.END)
+        self.entry_carga.delete(0, customtkinter.END)
         self.entry_repeticao.delete(0, customtkinter.END)
-
-
+        self.entry_idade.delete(0, customtkinter.END)
+        self.entry_peso.delete(0, customtkinter.END)
 
 
     # conexão com o controller
@@ -603,6 +618,7 @@ class View():
         nome = self.entry_nome.get()
         email = self.entry_email_registro.get()
         senha = self.entry_senha_registro.get()
+
 
         self.controller.controller_registro(nome, email, senha)
         
@@ -631,11 +647,16 @@ class View():
 
     #calculo
     def view_calculo(self):
-        exercicio = self.entry_exercicio.get()
-        peso = self.entry_peso.get()
+        exercicio = self.combobox_exercicio.get()
+        carga = self.entry_carga.get()
         repeticao = self.entry_repeticao.get()
+        genero = self.combobox_genero.get()
+        idade = self.entry_idade.get()
+        peso = self.entry_peso.get()
 
-        self.controller.controller_calculo(exercicio, peso, repeticao)
+
+
+        self.controller.controller_calculo(exercicio, carga, repeticao, genero, idade, peso)
     
     def calculo_sucesso(self):
         self.label_aviso_calculo.configure(text="")

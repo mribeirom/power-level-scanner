@@ -24,9 +24,9 @@ class Controller:
             if str(e) == 'login invalido':
                 self.view.login_mensagem_erro('LOGIN INVÁLIDO')
     
-    def controller_calculo(self, exercicio, peso, repeticao):
+    def controller_calculo(self, exercicio, carga, repeticao, genero, idade, peso):
         try:
-            self.model.model_calculo(exercicio, peso, repeticao)
+            self.model.model_calculo(exercicio, carga, repeticao, genero, idade, peso)
             self.view.calculo_sucesso()
         
         except ValueError as e:

@@ -1,4 +1,6 @@
 from pymongo import MongoClient
+import joblib
+import pandas
 
 class Model:
     def __init__(self):
@@ -18,10 +20,15 @@ class Model:
         
         elif self.usuarios.find_one({"email": email}):
             raise ValueError('email cadastrado')
+        
+        self.registrar_usuario(nome, email, senha)
 
+
+    def registrar_usuario(self, nome, email, senha):
         self.usuarios.insert_one({"nome": nome,
                                   "email": email,
                                   "senha": senha})
+
     
     def model_login(self, email, senha):
 
@@ -29,21 +36,62 @@ class Model:
         if not login:
             raise ValueError('login invalido')
         
-        self.usuario_logado = login
-        
-    def model_calculo(self, exercicio, peso, repeticao):
-        
-        if peso == "" or repeticao == "":
-            raise ValueError('campo vazio')
-        elif not peso.isdigit() or not repeticao.isdigit():
-            raise ValueError('digite apenas numeros')
+        self.logar_usuario(login)
 
-        # fórmula de epley para calcular a repetição maxima do usuario
-        repeticao_maxima = float(peso) * (1 + float(repeticao) / 30)
+    def logar_usuario(self, login):
+        self.usuario_logado = login
+
+        
+    def model_calculo(self, exercicio, carga, repeticao, genero, idade, peso):
+
+        if carga == "" or repeticao == "" or idade == "" or peso == "":
+            raise ValueError('campo vazio')
+        elif not carga.isdigit() or not repeticao.isdigit() or not idade.isdigit() or not peso.isdigit():
+            raise ValueError('digite apenas numeros')
+        
+        repeticao_maxima = self.calculo_maxima(carga, repeticao)
+
+        nivel_usuario = self.classificar_nivel(exercicio, repeticao_maxima, genero, idade, peso)
 
         self.resultado = {"exercicio": exercicio,
-                          "nivel": "INTERMEDIARIO",
+                          "nivel": nivel_usuario,
                           "repeticao_maxima": repeticao_maxima}
+        
+    def calculo_maxima(self, carga, repeticao):
+        # fórmula de epley para calcular a repetição maxima do usuario
+        repeticao_maxima = float(carga) * (1 + float(repeticao) / 30)
+        return repeticao_maxima
+    
+    def classificar_nivel(self, exercicio, repeticao_maxima, genero, idade, peso):
+        niveis = ['AVANÇADO', 'INICIANTE', 'INTERMEDIÁRIO']
+
+        exercicio_dic = {
+            "SUPINO": 2,
+            "DEADLIFT": 1,
+            "AGACHAMENTO": 0
+        }
+
+        genero_dic = {
+            "MASCULINO": 1,
+            "FEMININO": 0
+        }
+
+        dados_usuario = pandas.DataFrame([
+            {'exercicio': exercicio_dic[exercicio],
+             'genero': genero_dic[genero],
+             'idade': idade,
+             'peso_corporal': peso,
+             'peso_exercicio': repeticao_maxima}
+        ])
+
+
+        modelo_knn = joblib.load('knn/modelo_knn.pkl')
+        scaler = joblib.load('knn/scaler.pkl')
+
+        normalizar = ['idade', 'peso_corporal', 'peso_exercicio']
+        dados_usuario[normalizar] = scaler.transform(dados_usuario[normalizar])
+        predicao = modelo_knn.predict(dados_usuario)
+        return niveis[predicao[0]]
 
     def get_usuario_logado(self):
         return self.usuario_logado
