@@ -86,10 +86,7 @@ class Model:
 
 
         modelo_knn = joblib.load('knn/modelo_knn.pkl')
-        scaler = joblib.load('knn/scaler.pkl')
 
-        normalizar = ['idade', 'peso_corporal', 'peso_exercicio']
-        dados_usuario[normalizar] = scaler.transform(dados_usuario[normalizar])
         predicao = modelo_knn.predict(dados_usuario)
         return niveis[predicao[0]]
 

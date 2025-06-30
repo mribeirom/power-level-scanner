@@ -1,7 +1,7 @@
 import pandas
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 import joblib
 
@@ -13,8 +13,6 @@ class KNN:
         self.encoder_exercicio = LabelEncoder()
         self.encoder_genero = LabelEncoder()
         self.encoder_nivel = LabelEncoder()
-
-        self.scaler = StandardScaler()
 
         self.features_train = None
         self.features_test = None
@@ -41,18 +39,6 @@ class KNN:
         # divide os dados de treinamento entre 80% de treino e 20% de teste
         self.features_train, self.features_test, self.targets_train, self.targets_test = train_test_split(features, targets, test_size=0.2, random_state=42)
 
-    def normalizar_dados(self):
-
-        # normalizar os dados
-        normalizar = ['idade', 'peso_corporal', 'peso_exercicio']
-
-        self.scaler.fit(self.features_train[normalizar])
-        self.features_train[normalizar] = self.scaler.transform(self.features_train[normalizar])
-        self.features_test[normalizar] = self.scaler.transform(self.features_test[normalizar])
-        #dados com uma variação muito grande de tamanho podem dificultar na
-        #classificação do algoritmo,o maior valor sempre vai ter um peso maior
-        #para o modelo e normalizar os dados coloca todos osdados na mesma escala
-
     def treinamento_modelo(self):
         # treina o modelo
         self.modelo_knn.fit(self.features_train, self.targets_train)
@@ -76,10 +62,8 @@ class KNN:
         print(matrix)
     
     def salvar_modelo(self):
-        # salvar o modelo
+        # salva o modelo
         joblib.dump(self.modelo_knn, 'modelo_knn.pkl')
-        # salva o modelo de normalização
-        joblib.dump(self.scaler, 'scaler.pkl')
 
 
 
@@ -87,7 +71,6 @@ class KNN:
         self.carrega_dataset()
         self.converter_numeros()
         self.dividir_dataset()
-        self.normalizar_dados()
         self.treinamento_modelo()
 
 knn = KNN()
